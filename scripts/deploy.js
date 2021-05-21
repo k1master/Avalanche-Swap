@@ -14,12 +14,25 @@ async function main() {
   // await hre.run('compile');
 
   // We get the contract to deploy
-  const Coin = await hre.ethers.getContractFactory("CustomCoin");
-  const coin = await Coin.deploy();
+  const TestToken = await hre.ethers.getContractFactory("TestToken");
+  const tokenA = await TestToken.deploy("Avalanche-test-token-A", "AVTA");
+  await tokenA.deployed();
+  console.log("TokenA deployed to:", tokenA.address);
 
-  await coin.deployed();
+  const tokenB = await TestToken.deploy("Avalanche-test-token-B", "AVTB");
+  await tokenB.deployed();
+  console.log("TokenB deployed to:", tokenB.address);
 
-  console.log("Coin deployed to:", coin.address);
+  const tokenC = await TestToken.deploy("Avalanche-test-token-C", "AVTC");
+  await tokenC.deployed();
+  console.log("TokenC deployed to:", tokenC.address);
+
+  const Wrapper = await hre.ethers.getContractFactory("Wrapper");
+  const wrapper = await Wrapper.deploy(tokenC.address);
+
+  await wrapper.deployed();
+
+  console.log("Wrapper deployed to:", wrapper.address);
   
 }
 
